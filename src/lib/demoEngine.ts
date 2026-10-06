@@ -68,42 +68,42 @@ const SCENARIOS: Scenario[] = [
        nieuw("Valrisico bespreken met huisarts of casemanager", "Vraag naar oorzaken (bijv. medicatie of zicht) en naar een ergotherapeut of alarmering.", "nu", "hoog", 3, "Valincidenten vragen om een medische blik.")],
       { vervolgvraag: "Is je naaste bij een val gewond geraakt?" }) },
 
-  { id: "wlz", bronnen: ["ciz", "zorginstituut"], trefwoorden: ["wlz", "ciz", "indicatie", "zorgkantoor", "langdurige zorg"],
-    bouw: (c) => antw("Na een volledige aanvraag beslist het CIZ meestal binnen ongeveer 6 weken. Het voorbereiden van de stukken kost vaak ook een paar weken, en daarna kan er een wachttijd zijn voor een plek. Daarom zet ik de voorbereiding hoger. De precieze termijn hoor je het best van de casemanager of het CIZ zelf.",
+  { id: "wlz", bronnen: ["ciz-aanvraag", "zin-leveringsvormen"], trefwoorden: ["wlz", "ciz", "indicatie", "zorgkantoor", "langdurige zorg"],
+    bouw: (c) => antw("Na een volledige aanvraag krijg je volgens het CIZ binnen 6 weken een besluit, vaak eerder, en bij spoed sneller. Het voorbereiden van de stukken kost vaak ook een paar weken, en daarna kan er een wachttijd zijn voor een plek. Daarom zet ik de voorbereiding hoger. Is je aanvraag niet compleet, dan duurt het langer. Vraag bij twijfel de casemanager of het CIZ zelf.",
       [...zet(c, "wlz-voorbereiden", "binnenkort", "hoog", "De doorlooptijden zijn lang, dus begin op tijd."),
        nieuw("Medische gegevens verzamelen voor de Wlz-aanvraag", "Vraag de casemanager of huisarts welke stukken het CIZ nodig heeft en verzamel die alvast.", "binnenkort", "midden", 4, "Een complete aanvraag gaat sneller.")]) },
 
-  { id: "overbelast", bronnen: ["mantelzorg", "regelhulp"], trefwoorden: ["overbelast", "moe", "uitgeput", "burn", "overweldigd", "red het niet", "kan niet meer", "uit handen", "te veel", "zwaar", "opgebrand"],
+  { id: "overbelast", bronnen: ["rh-mantelzorgondersteuning", "mz-respijt"], trefwoorden: ["overbelast", "moe", "uitgeput", "burn", "overweldigd", "red het niet", "kan niet meer", "uit handen", "te veel", "zwaar", "opgebrand"],
     bouw: (c) => antw("Dat klinkt zwaar, en het is heel begrijpelijk. Je hoeft dit niet alleen te doen. Een expert kan het papierwerk voor de dagbesteding van je overnemen, en met respijtzorg krijg je een rustmoment. Zo houd je het vol.",
       [...expert(c, "dagbesteding", "Papierwerk en bellen kan een expert overnemen."), ...zet(c, "respijtzorg", "nu", "hoog", "Jij hebt nu rust nodig."),
        nieuw("Een vast rustmoment voor jezelf inplannen", "Plan elke week een moment dat je niets voor je naaste hoeft te doen, en vraag iemand om in te vallen.", "nu", "midden", 3, "Rust houdt de zorg vol.")],
       { vervolgvraag: "Wat kost je het meeste energie: het regelwerk of de zorg zelf?" }) },
 
-  { id: "volmacht", bronnen: ["notaris", "alzheimer"], trefwoorden: ["volmacht", "notaris", "bankzaken", "bankrekening", "geldzaken", "pinpas", "levenstestament", "testament"],
+  { id: "volmacht", bronnen: ["not-levenstestament", "an-vertegenwoordiging"], trefwoorden: ["volmacht", "notaris", "bankzaken", "bankrekening", "geldzaken", "pinpas", "levenstestament", "testament"],
     bouw: (c) => antw("Een volmacht kan alleen zolang je naaste de gevolgen ervan nog begrijpt. Daarom raad ik aan dit snel te regelen via een notaris. Of dat nog kan, beoordeelt de notaris. Ik zet de taak bovenaan.",
       [...zet(c, "volmacht", "nu", "hoog", "Een volmacht moet geregeld zijn zolang dat nog kan."),
        nieuw("Afspraak maken met een notaris over een volmacht", "Bel een notaris en vraag naar de mogelijkheden en kosten. Neem je naaste mee.", "nu", "hoog", 3, "Dit is de eerste concrete stap.")], { vervolgvraag: "Heeft je naaste zelf al eens iets laten vastleggen, zoals een testament?" }) },
 
-  { id: "mentorschap", bronnen: ["rechtspraak", "notaris"], trefwoorden: ["mentorschap", "mentor", "bewind", "bewindvoering", "curatele", "kantonrechter", "onder curatele"],
+  { id: "mentorschap", bronnen: ["rs-mentorschap", "not-bewind"], trefwoorden: ["mentorschap", "mentor", "bewind", "bewindvoering", "curatele", "kantonrechter", "onder curatele"],
     bouw: (c) => antw("Mentorschap gaat over beslissingen over zorg en verblijf, bewind over geld. Beide regel je via de kantonrechter als een volmacht niet (meer) kan. Het is goed om dit nu te bespreken, ook als het nog niet nodig is. Een notaris, de casemanager of een expert kan uitleggen wat bij jullie past.",
       [...zet(c, "mentorschap", "binnenkort", "hoog", "Dit duurt maanden, dus verken het op tijd."),
        nieuw("Verschil tussen volmacht, mentorschap en bewind uitzoeken", "Bespreek met de notaris of casemanager welke regeling past.", "binnenkort", "midden", 3, "Zo kies je de juiste regeling.")]) },
 
-  { id: "werk", bronnen: ["rijksoverheid", "mantelzorg"], trefwoorden: ["werk", "werkgever", "verlof", "zorgverlof", "baas", "leidinggevende", "collega", "ziekmelden", "uren minderen"],
-    bouw: (c) => antw("Combineren van werk en zorg is zwaar. Er is kortdurend zorgverlof (deels doorbetaald) en langdurend zorgverlof (onbetaald). Bespreek met je werkgever wat past. Hoe eerder je het gesprek voert, hoe makkelijker het wordt. Ik zet dit bovenaan.",
+  { id: "werk", bronnen: ["ro-zorgverlof-salaris", "mz-verlof", "ro-verlofwet-2026"], trefwoorden: ["werk", "werkgever", "verlof", "zorgverlof", "baas", "leidinggevende", "collega", "ziekmelden", "uren minderen"],
+    bouw: (c) => antw("Combineren van werk en zorg is zwaar. Er is kortdurend zorgverlof (minimaal 70% van je loon doorbetaald) en langdurend zorgverlof (onbetaald). Het kabinet wil dit samenvoegen, maar dat is nog niet van kracht. Bespreek met je werkgever wat past. Hoe eerder je het gesprek voert, hoe makkelijker het wordt. Ik zet dit bovenaan.",
       [...zet(c, "werkgever", "nu", "hoog", "Je geeft aan dat werk en zorg botsen."),
        nieuw("Gesprek met werkgever voorbereiden (verlof en afspraken)", "Bedenk wat je nodig hebt, bijvoorbeeld andere werktijden of verlof, en vraag een gesprek aan.", "nu", "midden", 3, "Een goede voorbereiding maakt het gesprek makkelijker.")]) },
 
-  { id: "dagbesteding", bronnen: ["regelhulp", "alzheimer"], trefwoorden: ["dagbesteding", "dagopvang", "dagcentrum", "overdag naar", "activiteiten"],
-    bouw: (c) => antw("Dagbesteding geeft je naaste structuur en jou rustmomenten. Je vraagt het aan via het Wmo-loket van je gemeente. Er kan een wachttijd zijn, dus begin snel. Een expert kan de aanvraag voor je doen.",
+  { id: "dagbesteding", bronnen: ["dem-dagbesteding", "rh-dagbesteding"], trefwoorden: ["dagbesteding", "dagopvang", "dagcentrum", "overdag naar", "activiteiten"],
+    bouw: (c) => antw("Dagbesteding geeft je naaste structuur en jou rustmomenten. Je vraagt het aan via het Wmo-loket van je gemeente, meestal tegen een eigen bijdrage. Er kan een wachttijd zijn, dus begin snel. Een expert kan de aanvraag voor je doen.",
       [...zet(c, "dagbesteding", "nu", "hoog", "Er kan een wachttijd zijn."), ...expert(c, "dagbesteding", "Een expert kan de aanvraag invullen.")]) },
 
-  { id: "respijt", bronnen: ["mantelzorg", "regelhulp"], trefwoorden: ["respijt", "logeren", "logeerhuis", "vakantie", "weekend weg", "even vrij", "pauze", "afleiding", "ontlasten"],
-    bouw: (c) => antw("Respijtzorg neemt de zorg tijdelijk over, bijvoorbeeld een logeerplek of een vrijwilliger aan huis. Informeer bij de casemanager of het Wmo-loket wat er in jullie gemeente kan. Ik zet het hoger in je tijdlijn.",
+  { id: "respijt", bronnen: ["mz-respijt", "rh-logeren"], trefwoorden: ["respijt", "logeren", "logeerhuis", "vakantie", "weekend weg", "even vrij", "pauze", "afleiding", "ontlasten"],
+    bouw: (c) => antw("Respijtzorg neemt de zorg tijdelijk over, bijvoorbeeld een logeerplek of een vrijwilliger aan huis. Je kunt het aanvragen via de huisarts, de wijkverpleegkundige of het Wmo-loket. Logeeropvang valt onder de Wmo zolang er geen Wlz-indicatie is. Ik zet het hoger in je tijdlijn.",
       zet(c, "respijtzorg", "nu", "hoog", "Een pauze voorkomt overbelasting.")) },
 
-  { id: "wmo", bronnen: ["rijksoverheid", "regelhulp"], trefwoorden: ["wmo", "huishoudelijke hulp", "gemeente", "hulp in huis", "schoonmaak", "traplift", "aanpassing"],
-    bouw: (c) => antw("Via het Wmo-loket van je gemeente vraag je hulp aan, zoals huishoudelijke hulp of aanpassingen in huis. De gemeente beslist meestal binnen ongeveer 8 weken. Ik zet het alvast in je tijdlijn.",
+  { id: "wmo", bronnen: ["rh-wmo-aanmelding", "ro-wmo-aanvragen"], trefwoorden: ["wmo", "huishoudelijke hulp", "gemeente", "hulp in huis", "schoonmaak", "traplift", "aanpassing"],
+    bouw: (c) => antw("Via het Wmo-loket van je gemeente vraag je hulp aan, zoals huishoudelijke hulp of aanpassingen in huis. De gemeente moet binnen 6 weken na je melding onderzoek doen en beslist daarna binnen 2 weken. Ik zet het alvast in je tijdlijn.",
       zet(c, "wmo-aanvraag", "nu", "midden", "Het besluit van de gemeente duurt even.")) },
 
   { id: "dwalen", bronnen: ["alzheimer", "dementie_nl"], trefwoorden: ["dwalen", "dwaalt", "loopt weg", "loopt steeds weg", "weggelopen", "weglopen", "wegloop", "verdwaald", "kwijt", "gps", "buiten rond", "niet thuis gevonden"],
@@ -124,8 +124,8 @@ const SCENARIOS: Scenario[] = [
     bouw: () => antw("Onrustige nachten komen vaak voor en zijn ook voor jou slopend. Bespreek het met de huisarts of casemanager. Ik zet een taak in je tijdlijn. Neem ook zelf je rust, bijvoorbeeld door een nacht door iemand anders te laten opvangen.",
       [nieuw("Nachtelijke onrust bespreken met huisarts of casemanager", "Houd een paar dagen bij hoe de nachten verlopen en wat helpt.", "binnenkort", "midden", 3, "Slaapproblemen verergeren de belasting voor jullie beiden.")]) },
 
-  { id: "casemanager", bronnen: ["zorginstituut", "alzheimer"], trefwoorden: ["casemanager", "aanspreekpunt", "vaste contactpersoon", "wie kan ik bellen"],
-    bouw: (c) => antw("Een casemanager dementie is jullie vaste aanspreekpunt voor advies en doorverwijzing. Als je er al een hebt, plan dan een gesprek om de punten uit je tijdlijn door te nemen. Heb je er nog geen, vraag er dan een aan via de huisarts of de geheugenpoli.",
+  { id: "casemanager", bronnen: ["dem-casemanager", "zin-casemanagement"], trefwoorden: ["casemanager", "aanspreekpunt", "vaste contactpersoon", "wie kan ik bellen"],
+    bouw: (c) => antw("Een casemanager dementie is jullie vaste aanspreekpunt voor advies en doorverwijzing. De kosten worden vergoed uit de basisverzekering; verzorging doet de casemanager zelf niet. Als je er al een hebt, plan dan een gesprek om de punten uit je tijdlijn door te nemen. Heb je er nog geen, vraag er dan een aan via de huisarts of de geheugenpoli.",
       [...zet(c, "casemanager-aanvragen", "nu", "hoog", "Een vast aanspreekpunt scheelt veel zoeken."),
        nieuw("Gesprek plannen met de casemanager over mijn tijdlijn", "Neem je tijdlijn mee en loop samen de belangrijkste taken door.", "nu", "midden", 3, "De casemanager kan helpen prioriteren.")]) },
 
@@ -133,17 +133,17 @@ const SCENARIOS: Scenario[] = [
     bouw: () => antw("Over kosten kan ik geen precieze bedragen noemen, want die verschillen per situatie en regeling. Voor Wmo-hulp en Wlz-zorg geldt vaak een eigen bijdrage. De gemeente, het zorgkantoor of een expert kan voor jou uitrekenen wat het wordt. Ik zet het uitzoeken in je tijdlijn.",
       [nieuw("Kosten en eigen bijdrage uitzoeken (Wmo en Wlz)", "Vraag bij de gemeente en het zorgkantoor wat de eigen bijdrage is.", "binnenkort", "midden", 3, "Zo ben je niet verrast door kosten.")]) },
 
-  { id: "verpleeghuis", bronnen: ["ciz", "zorgkaart", "zorginstituut"], trefwoorden: ["verpleeghuis", "opname", "niet meer thuis", "thuis lukt niet", "wachtlijst", "zorginstelling", "ouderenzorg", "beschermd wonen"],
+  { id: "verpleeghuis", bronnen: ["ciz-aanvraag", "zin-leveringsvormen", "zorgkaart"], trefwoorden: ["verpleeghuis", "opname", "niet meer thuis", "thuis lukt niet", "wachtlijst", "zorginstelling", "ouderenzorg", "beschermd wonen"],
     bouw: (c) => antw("Dat is een groot besluit, en het is normaal dat het veel met je doet. Voor een plek in een verpleeghuis is een Wlz-indicatie van het CIZ nodig. De wachttijd verschilt per regio en kan maanden duren. Daarom zet ik de voorbereiding en het bezoeken van locaties vast in je tijdlijn.",
       [...zet(c, "wlz-voorbereiden", "nu", "hoog", "Zonder indicatie geen plek, en de doorlooptijd is lang."), ...zet(c, "verpleeghuizen-bekijken", "binnenkort", "midden", "Een keuze maken kost tijd."), ...zet(c, "zorgkantoor", "binnenkort", "midden", "Het zorgkantoor regelt de wachtlijst.")],
       { vervolgvraag: c.t.includes("niet meer thuis") || c.t.includes("lukt niet") ? "Is het thuis nu acuut onveilig?" : null, fase_aanpassing: c.fase < 4 && (c.t.includes("niet meer thuis") || c.t.includes("lukt niet")) ? 4 : null }) },
 
-  { id: "levenseinde", bronnen: ["palliaweb", "dementie_nl", "mantelzorg"], trefwoorden: ["overleden", "laatste levensfase", "palliatief", "stervende", "sterft", "afscheid", "uitvaart", "euthanasie", "hospice"],
+  { id: "levenseinde", bronnen: ["pw-dementie", "dem-wensen", "not-overlijden"], trefwoorden: ["overleden", "laatste levensfase", "palliatief", "stervende", "sterft", "afscheid", "uitvaart", "euthanasie", "hospice"],
     bouw: (c) => antw("Wat verdrietig, ik leef met je mee. Je hoeft nu niet alles te regelen. Ik zet een paar dingen klaar voor als je eraan toe bent. De huisarts kan palliatieve zorg met je bespreken. Zorg ook goed voor jezelf.",
       [...zet(c, "palliatieve-zorg", "nu", "hoog", "Goede afspraken geven rust."), ...zet(c, "wensen-bespreken", "nu", "midden", "De wensen van je naaste staan voorop."), ...zet(c, "nazorg", "binnenkort", "laag", "Ook jij hebt steun nodig.")],
       { fase_aanpassing: c.fase !== 5 ? 5 : null }) },
 
-  { id: "signalen", bronnen: ["alzheimer", "dementie_nl"], trefwoorden: ["vergeetachtig", "vergeet", "geheugen", "verward", "dementie", "alzheimer", "diagnose", "geheugenpoli", "eerste tekenen"],
+  { id: "signalen", bronnen: ["an-geheugenverlies", "dem-huisarts"], trefwoorden: ["vergeetachtig", "vergeet", "geheugen", "verward", "dementie", "alzheimer", "diagnose", "geheugenpoli", "eerste tekenen"],
     bouw: (c) => antw("Dank je dat je dit deelt. Dementie heeft veel kanten, en elke situatie is anders. Het helpt om voorbeelden te noteren van wat je ziet, en dat te bespreken met de huisarts of casemanager. Ik zet een taak voor je klaar.",
       [...zet(c, "signalen-noteren", "nu", "midden", "Concrete voorbeelden helpen de arts."), ...(c.fase <= 2 ? zet(c, "huisarts-afspraak", "nu", "hoog", "Hoe eerder duidelijkheid, hoe meer opties.") : [])],
       { vervolgvraag: "Is er al een diagnose gesteld?" }) },

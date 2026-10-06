@@ -29,7 +29,7 @@ export function TaskCard({ task, highlight, onExpert }: { task: Task; highlight:
       </div>
       <h3 className={`mt-2 text-lg font-bold leading-snug ${klaar ? "line-through" : ""}`}>{task.titel}</h3>
       <p className="mt-1 text-base text-ink-soft">{task.uitleg}</p>
-      <p className="mt-2 text-sm font-semibold text-ink-soft"><span aria-hidden>⏱ </span>Doorlooptijd: {task.doorlooptijd}</p>
+      <p className="mt-2 text-sm font-semibold text-ink-soft"><span aria-hidden>⏱ </span>Doorlooptijd: {task.doorlooptijd} <span className="font-normal">(indicatie)</span></p>
 
       <button className="mt-2 text-sm font-bold text-mist-600 underline underline-offset-2" aria-expanded={open} onClick={() => setOpen(!open)}>
         Waarom nu?

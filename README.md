@@ -39,7 +39,8 @@ Deployen: Vercel of vergelijkbaar, zet `ANTHROPIC_API_KEY` als omgevingsvariabel
 - `src/lib/bronnen.ts` is het **bronnenregister** (Alzheimer Nederland, Dementie.nl, Zorginstituut Nederland, CIZ, Rijksoverheid, Regelhulp, MantelzorgNL, Notaris.nl, De Rechtspraak, Zorgkaart Nederland, Palliaweb). Taken (`TAAK_BRONNEN` in `seed.ts`), de kennisbank (`bronnen` per fase) en chatantwoorden verwijzen met een id naar dit register. In de UI zie je "Meer informatie bij: ...".
 - **Live chat:** `src/lib/retrieval.ts` zoekt per vraag de best passende fragmenten in kennisbank en takenbibliotheek en stuurt die met hun bron-id's mee (BRONNENCONTEXT). De system prompt verplicht het model om feiten daaruit te halen, eerlijk te zeggen wat er niet in staat en het veld `bronnen` te vullen. Onbekende bron-id's van het model worden in `chatParse.ts` weggefilterd.
 - **Demo-modus:** elk scenario heeft vaste bronnen.
-- **Let op:** de links wijzen naar de hoofdsite van de organisatie en de teksten in de app zijn eigen samenvattingen, geen citaten. Controleer inhoud en termijnen voor gebruik bij de bron en voeg diepe links toe zodra je ze hebt geverifieerd.
+- **Controle:** feiten en links zijn nagelopen op 6 oktober 2026, zie `docs/bronnencontrole.md` (wat is bevestigd, aangepast en nog niet geverifieerd). Let op: de bronpagina's zelf waren in de ontwikkelomgeving niet te openen. Open de links en controleer de inhoud voordat je de app buiten de studieopdracht gebruikt.
+- De registry bevat nu naast organisaties ook diepe links naar specifieke pagina's (bijv. `ciz-aanvraag`, `rh-wmo-aanmelding`). De teksten in de app blijven eigen samenvattingen, geen citaten.
 
 ## Hoe wordt de fase bepaald?
 

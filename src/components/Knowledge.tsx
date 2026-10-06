@@ -5,6 +5,7 @@ import { KENNIS } from "@/lib/knowledge";
 import { useStore } from "@/lib/store";
 import type { Fase } from "@/lib/types";
 import { BronLinks } from "./BronLinks";
+import { LAATST_GECONTROLEERD } from "@/lib/bronnen";
 
 const FASES: Fase[] = [1, 2, 3, 4, 5];
 
@@ -78,7 +79,7 @@ export function Knowledge() {
             </div>
             <div className="border-t border-sand-100 pt-4 md:col-span-2">
               <BronLinks ids={k.bronnen} />
-              <p className="mt-1 text-xs text-ink-soft">Deze uitleg is een samenvatting in gewone taal. Controleer termijnen en regels altijd bij de bron.</p>
+              <p className="mt-1 text-xs text-ink-soft">Deze uitleg is een samenvatting in gewone taal. Bronnen nagelopen op {LAATST_GECONTROLEERD}. Controleer termijnen en regels altijd bij de bron.</p>
             </div>
           </div>
         </>
