@@ -8,7 +8,7 @@ export function Header() {
   const totaal = state.tasks.length;
   const pct = totaal ? Math.round((klaar / totaal) * 100) : 0;
   return (
-    <header className="sticky top-0 z-30 border-b border-sand-100 bg-paper/95 backdrop-blur">
+    <header className="z-30 sm:sticky sm:top-0 border-b border-sand-100 bg-paper/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
         <p className="text-lg font-extrabold text-sage-800">Mantelzorg Navigator</p>
         <span className="chip bg-sage-100 text-sage-800">Fase {state.fase}: {FASE_NAMEN[state.fase]}</span>
