@@ -5,6 +5,7 @@ import { Header } from "./Header";
 import { Timeline } from "./Timeline";
 import { Footer } from "./Footer";
 import { Knowledge } from "./Knowledge";
+import { Chat } from "./Chat";
 import { ExpertBlock } from "./ExpertBlock";
 import { ExpertModal } from "./ExpertModal";
 
@@ -21,7 +22,6 @@ export function Dashboard() {
     setHighlight(ids);
     setTimeout(() => setHighlight([]), 5000);
   }, []);
-  void toonWijzigingen;
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -32,6 +32,7 @@ export function Dashboard() {
         <Knowledge />
       </main>
       <Footer />
+      <Chat onShowChanges={toonWijzigingen} />
       {expertOpen && <ExpertModal taakId={expertTaak} onClose={() => setExpertOpen(false)} />}
     </div>
   );

@@ -1,0 +1,128 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { applyUpdates } from "@/lib/apply";
+import { fallbackAntwoord } from "@/lib/fallback";
+import { useStore } from "@/lib/store";
+import type { ChatAntwoord, ChatMessage } from "@/lib/types";
+
+const CHIPS = ["Mijn moeder valt steeds vaker, wat nu?", "Hoe lang duurt een Wlz-indicatie?", "Ik ben overbelast, wat kan ik uit handen geven?"];
+const uid = () => Math.random().toString(36).slice(2, 10);
+
+export function Chat({ onShowChanges }: { onShowChanges: (ids: string[]) => void }) {
+  const { state, setChat, applyChange, undo } = useStore();
+  const [open, setOpen] = useState(false);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [lastVraag, setLastVraag] = useState<string | null>(null);
+  const endRef = useRef<HTMLDivElement>(null);
+  // Houd de nieuwste state vast: na het wachten op de API kan de gebruiker de tijdlijn al hebben aangepast.
+  const stateRef = useRef(state);
+  stateRef.current = state;
+
+  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" }); }, [state.chat, loading, open]);
+
+  /** Roept /api/chat aan. Valt bij een storing terug op gescripte demo-antwoorden voor de voorbeeldvragen. */
+  const vraagAntwoord = async (vraag: string, historie: ChatMessage[]): Promise<ChatAntwoord | null> => {
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          vraag, intake: state.answers, fase: state.fase, berichten: historie,
+          tijdlijn: state.tasks.map(({ id, titel, zone, urgentie, status, fase }) => ({ id, titel, zone, urgentie, status, fase })),
+        }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      const data = await res.json();
+      if (!data.antwoord) throw new Error("leeg");
+      return data.antwoord as ChatAntwoord;
+    } catch {
+      return fallbackAntwoord(vraag, state.tasks);
+    }
+  };
+
+  const send = async (vraag: string, retry = false) => {
+    const tekst = vraag.trim();
+    if (!tekst || loading) return;
+    setInput(""); setLastVraag(tekst); setLoading(true);
+    const historie = state.chat.filter((m) => !m.fout);
+    setChat((c) => [...c.filter((m) => !m.fout), ...(retry ? [] : [{ id: uid(), rol: "gebruiker" as const, tekst }])]);
+    const antwoord = await vraagAntwoord(tekst, retry ? historie.slice(0, -1) : historie);
+    setLoading(false);
+    if (!antwoord) {
+      setChat((c) => [...c, { id: uid(), rol: "assistent", fout: true, tekst: "Er ging iets mis bij het ophalen van mijn antwoord. Je tijdlijn is niet aangepast. Probeer het gerust nog een keer." }]);
+      return;
+    }
+    const res = applyUpdates(stateRef.current.tasks, antwoord.tijdlijn_updates, antwoord.fase_aanpassing, stateRef.current.fase);
+    let wijzigingen: ChatMessage["wijzigingen"];
+    if (res.summary) {
+      const undoId = uid();
+      applyChange(res.tasks, res.fase, undoId);
+      wijzigingen = { tekst: res.summary, taakIds: res.changedIds, undoId };
+    }
+    setChat((c) => [...c, { id: uid(), rol: "assistent", tekst: antwoord.antwoord, wijzigingen, vervolgvraag: antwoord.vervolgvraag }]);
+  };
+
+  const laatsteWijziging = [...state.chat].reverse().find((m) => m.wijzigingen)?.id;
+
+  return (
+    <>
+      {!open && (
+        <button onClick={() => setOpen(true)} aria-label="Open de chat met de assistent"
+          className="btn-primary fixed bottom-4 right-4 z-40 !px-6 !py-3.5 text-lg shadow-lg">
+          <span aria-hidden>💬</span> Stel een vraag
+        </button>
+      )}
+      {open && (
+        <aside role="dialog" aria-label="Chat met de assistent"
+          className="fixed inset-0 z-50 flex flex-col bg-white sm:inset-auto sm:bottom-4 sm:right-4 sm:h-[min(640px,calc(100vh-2rem))] sm:w-[400px] sm:rounded-xl2 sm:border sm:border-sand-200 sm:shadow-2xl">
+          <div className="flex items-center justify-between rounded-t-xl2 bg-sage-700 px-4 py-3 text-white">
+            <div><p className="font-extrabold">Assistent</p><p className="text-sm text-sage-100">Denkt met je mee en past je tijdlijn aan</p></div>
+            <button className="rounded-full px-3 py-1 text-xl hover:bg-sage-800" onClick={() => setOpen(false)} aria-label="Chat sluiten">✕</button>
+          </div>
+          <div className="flex-1 space-y-3 overflow-y-auto p-4" aria-live="polite">
+            {state.chat.length === 0 && (
+              <div className="rounded-xl bg-sage-50 p-4">
+                <p className="font-bold text-sage-800">Hoi, ik denk graag met je mee.</p>
+                <p className="mt-1 text-ink-soft">Vertel wat er speelt, in je eigen woorden. Als er iets bijkomt of verandert, pas ik je tijdlijn aan.</p>
+              </div>
+            )}
+            {state.chat.map((m) => (
+              <div key={m.id} className={`flex ${m.rol === "gebruiker" ? "justify-end" : ""}`}>
+                <div className={`anim-pop max-w-[90%] rounded-2xl px-4 py-2.5 ${m.rol === "gebruiker" ? "bg-sage-700 text-white" : m.fout ? "bg-accent-50 text-ink" : "bg-sand-50 text-ink"}`}>
+                  <p className="whitespace-pre-wrap">{m.tekst}</p>
+                  {m.fout && lastVraag && <button className="btn-accent btn-sm mt-2" onClick={() => send(lastVraag, true)} disabled={loading}>Opnieuw proberen</button>}
+                  {m.wijzigingen && (
+                    <div className="mt-3 rounded-xl border border-sage-300 bg-white p-3 text-sm">
+                      <p className="font-bold text-sage-800">Ik heb je tijdlijn aangepast: {m.wijzigingen.tekst}{m.wijzigingen.ongedaan ? " (ongedaan gemaakt)" : ""}</p>
+                      {!m.wijzigingen.ongedaan && (
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          <button className="btn-primary btn-sm" onClick={() => { onShowChanges(m.wijzigingen!.taakIds); if (window.innerWidth < 640) setOpen(false); }}>Bekijk wijzigingen</button>
+                          {m.id === laatsteWijziging && m.wijzigingen.undoId && <button className="btn-ghost btn-sm" onClick={() => undo(m.wijzigingen!.undoId!)}>Ongedaan maken</button>}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {m.vervolgvraag && <p className="mt-2 font-semibold text-sage-800">{m.vervolgvraag}</p>}
+                </div>
+              </div>
+            ))}
+            {loading && <p className="rounded-2xl bg-sand-50 px-4 py-2.5 text-ink-soft" role="status">Ik denk met je mee…</p>}
+            <div ref={endRef} />
+          </div>
+          <div className="border-t border-sand-100 p-3">
+            {state.chat.length === 0 && (
+              <div className="mb-2 flex flex-wrap gap-2">
+                {CHIPS.map((c) => <button key={c} className="rounded-full border border-sand-200 bg-white px-3 py-1.5 text-left text-sm font-semibold text-sage-800 hover:bg-sage-50" onClick={() => send(c)} disabled={loading}>{c}</button>)}
+              </div>
+            )}
+            <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); send(input); }}>
+              <label className="flex-1"><span className="sr-only">Jouw vraag</span>
+                <input className="input" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Typ je vraag…" disabled={loading} /></label>
+              <button className="btn-primary" type="submit" disabled={loading || !input.trim()}>Stuur</button>
+            </form>
+          </div>
+        </aside>
+      )}
+    </>
+  );
+}
