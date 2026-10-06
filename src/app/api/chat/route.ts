@@ -4,7 +4,13 @@ import { SYSTEM_PROMPT } from "@/lib/chatPrompt";
 import { parseChatAntwoord } from "@/lib/chatParse";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 export const maxDuration = 60;
+
+/** Laat de client weten of de echte API beschikbaar is (sleutel ingesteld) of dat de demo-modus moet draaien. */
+export async function GET() {
+  return NextResponse.json({ live: !!process.env.ANTHROPIC_API_KEY });
+}
 
 /**
  * Chat-endpoint. De API-sleutel (ANTHROPIC_API_KEY) blijft server-side.

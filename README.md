@@ -16,7 +16,11 @@ npm run dev                  # http://localhost:3000
 | `ANTHROPIC_API_KEY` | ja voor echte chat | Alleen gebruikt in `src/app/api/chat/route.ts` (server-side), nooit in de browser. |
 | `ANTHROPIC_MODEL` | nee | Standaard `claude-sonnet-5-5`. |
 
-Zonder sleutel (of bij een storing) valt de chat terug op gescripte antwoorden voor de 3 voorbeeldvragen. Andere vragen geven dan een vriendelijke foutmelding met "Opnieuw proberen". De tijdlijn blijft altijd intact.
+### Demo-modus (zonder API-sleutel)
+
+Is `ANTHROPIC_API_KEY` **niet** ingesteld, dan draait de chat automatisch in *Demo-modus*: gescripte scenario's met trefwoordherkenning (`src/lib/demoEngine.ts`, 20 scenario's, o.a. vallen, Wlz/CIZ, overbelasting, volmacht, mentorschap, werk en verlof, dagbesteding, respijtzorg, Wmo, dwalen, medicatie, gedrag, slaap, casemanager, kosten, verpleeghuis, levenseinde, vergeetachtigheid, expert, "waar begin ik" en "maak ongedaan"). Elk scenario geeft dezelfde tijdlijnupdates terug als de echte API (toevoegen, verplaatsen, urgentie, afronden, expert voorstellen, fase) en is ongedaan te maken, ook met de zin "maak dat ongedaan". Onbekende vragen krijgen een eerlijk antwoord met verwijzing naar huisarts, casemanager of expert.
+
+In de chatkop staat een kleine indicator "Demo-modus" (te verbergen met "verberg", terug te halen met "Demo-modus tonen"). Zodra je de sleutel instelt en de server herstart, schakelt de app zelf over naar de echte API en verdwijnt de indicator. De status komt van `GET /api/chat`. Bij een storing in de echte API toont de chat een vriendelijke foutmelding met "Opnieuw proberen"; de tijdlijn blijft intact.
 
 Deployen: Vercel of vergelijkbaar, zet `ANTHROPIC_API_KEY` als omgevingsvariabele.
 

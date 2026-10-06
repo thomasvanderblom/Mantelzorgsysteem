@@ -91,3 +91,10 @@ export function seedTaken(): Task[] {
   // Eén taak is al afgerond zodat de voortgangsbalk er direct goed uitziet.
   return taken.map((t) => (t.id === "mantelzorgsteun" ? { ...t, status: "klaar" as const } : t));
 }
+
+/** Zoekt een taak uit de bibliotheek (voor o.a. de demo-modus van de chat). */
+export function taakUitBibliotheek(id: string): Task | null {
+  const t = LIB.find((x) => x.id === id);
+  if (!t) return null;
+  return { id: t.id, titel: t.titel, uitleg: t.uitleg, waarom: t.waarom, doorlooptijd: t.doorlooptijd, zone: "binnenkort", urgentie: t.urgentie, status: "te_doen", fase: t.fase };
+}
