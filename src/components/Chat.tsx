@@ -4,6 +4,7 @@ import { applyUpdates } from "@/lib/apply";
 import { demoAntwoord } from "@/lib/demoEngine";
 import { useStore } from "@/lib/store";
 import type { ChatAntwoord, ChatMessage } from "@/lib/types";
+import { BronLinks } from "./BronLinks";
 
 const CHIPS = ["Mijn moeder valt steeds vaker, wat nu?", "Hoe lang duurt een Wlz-indicatie?", "Ik ben overbelast, wat kan ik uit handen geven?"];
 const uid = () => Math.random().toString(36).slice(2, 10);
@@ -82,7 +83,7 @@ export function Chat({ onShowChanges }: { onShowChanges: (ids: string[]) => void
       applyChange(res.tasks, res.fase, undoId);
       wijzigingen = { tekst: res.summary, taakIds: res.changedIds, undoId };
     }
-    setChat((c) => [...c, { id: uid(), rol: "assistent", tekst: antwoord.antwoord, wijzigingen, vervolgvraag: antwoord.vervolgvraag }]);
+    setChat((c) => [...c, { id: uid(), rol: "assistent", tekst: antwoord.antwoord, wijzigingen, vervolgvraag: antwoord.vervolgvraag, bronnen: antwoord.bronnen }]);
   };
 
   const laatsteWijziging = [...state.chat].reverse().find((m) => m.wijzigingen)?.id;
@@ -133,6 +134,7 @@ export function Chat({ onShowChanges }: { onShowChanges: (ids: string[]) => void
                       )}
                     </div>
                   )}
+                  {m.rol === "assistent" && !m.fout && <BronLinks ids={m.bronnen} className="mt-2" />}
                   {m.vervolgvraag && <p className="mt-2 font-semibold text-sage-800">{m.vervolgvraag}</p>}
                 </div>
               </div>

@@ -33,7 +33,7 @@ export function applyUpdates(tasks: Task[], updates: TijdlijnUpdate[], faseAanpa
         const nieuw: Task = {
           id: `chat-${now}-${added}`, titel: u.titel, uitleg: u.uitleg || "", waarom: u.reden || "Toegevoegd op basis van ons gesprek.",
           doorlooptijd: "Wordt in overleg bepaald", zone: u.zone ?? "binnenkort", urgentie: u.urgentie ?? "midden",
-          status: "te_doen", fase: isFase(u.fase) ? u.fase : huidigeFase,
+          status: "te_doen", fase: isFase(u.fase) ? u.fase : huidigeFase, bronnen: u.bronnen,
         };
         touch(nieuw); next = [nieuw, ...next]; added++; break;
       }

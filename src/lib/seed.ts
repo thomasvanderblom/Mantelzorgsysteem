@@ -51,6 +51,21 @@ const LIB: Template[] = [
   { id: "nazorg", fase: 5, titel: "Nazorg voor jezelf", uitleg: "Rouw heeft tijd nodig. Praat met de huisarts, een lotgenotengroep of een steunpunt.", waarom: "Na lange zorg ontstaat vaak een leegte. Hulp zoeken is normaal.", doorlooptijd: "Zolang als nodig", urgentie: "laag", kern: true, blijvend: true },
 ];
 
+/** Bronnen per taak (id's uit bronnen.ts): waar de gebruiker meer kan lezen. */
+export const TAAK_BRONNEN: Record<string, string[]> = {
+  "huisarts-afspraak": ["alzheimer", "dementie_nl"], "signalen-noteren": ["alzheimer"], "gesprek-naaste": ["alzheimer", "dementie_nl"],
+  geheugenpoli: ["zorginstituut", "alzheimer"], "dossier-medicatie": ["dementie_nl"], "uitslag-bespreken": ["alzheimer"],
+  "casemanager-aanvragen": ["zorginstituut", "alzheimer"], "alzheimer-info": ["alzheimer", "dementie_nl"],
+  volmacht: ["notaris", "alzheimer"], mentorschap: ["rechtspraak", "notaris"], dagbesteding: ["regelhulp", "alzheimer"],
+  respijtzorg: ["mantelzorg", "regelhulp"], "wmo-aanvraag": ["rijksoverheid", "regelhulp"], "huis-veiliger": ["alzheimer", "dementie_nl"],
+  werkgever: ["rijksoverheid", "mantelzorg"], noodplan: ["mantelzorg"], mantelzorgsteun: ["mantelzorg", "alzheimer"],
+  "wlz-voorbereiden": ["ciz", "zorginstituut"], "ciz-aanvragen": ["ciz", "rijksoverheid"], zorgkantoor: ["zorginstituut", "rijksoverheid"],
+  "verpleeghuizen-bekijken": ["zorgkaart", "zorginstituut"], "pgb-vpt": ["rijksoverheid", "ciz"],
+  "wensen-bespreken": ["palliaweb", "alzheimer"], "palliatieve-zorg": ["palliaweb", "dementie_nl"], uitvaart: ["notaris", "rijksoverheid"],
+  erfrecht: ["notaris", "rijksoverheid"], nazorg: ["mantelzorg", "alzheimer"],
+};
+export const BIBLIOTHEEK = LIB;
+
 function zoneVoor(t: Template, huidig: Fase): Zone | null {
   const afstand = t.fase - huidig;
   if (afstand === 0) return t.kern ? "nu" : "binnenkort";
@@ -73,7 +88,7 @@ export function genereerTaken(answers: Answers, fase: Fase = bepaalFase(answers)
     if (has(answers, "belasting", "veiligheid") && t.id === "huis-veiliger") urgentie = "hoog";
     if (has(answers, "belasting", "werk") && t.id === "werkgever") urgentie = "hoog";
     if (answers.uren === "20plus" && t.id === "respijtzorg") urgentie = "hoog";
-    taken.push({ id: t.id, titel: t.titel, uitleg: t.uitleg, waarom: t.waarom, doorlooptijd: t.doorlooptijd, zone, urgentie, status: "te_doen", fase: t.fase });
+    taken.push({ id: t.id, titel: t.titel, uitleg: t.uitleg, waarom: t.waarom, doorlooptijd: t.doorlooptijd, zone, urgentie, status: "te_doen", fase: t.fase, bronnen: TAAK_BRONNEN[t.id] });
   }
   // Binnen elke zone: hoge urgentie eerst.
   const rang = { hoog: 0, midden: 1, laag: 2 } as const;
@@ -96,5 +111,5 @@ export function seedTaken(): Task[] {
 export function taakUitBibliotheek(id: string): Task | null {
   const t = LIB.find((x) => x.id === id);
   if (!t) return null;
-  return { id: t.id, titel: t.titel, uitleg: t.uitleg, waarom: t.waarom, doorlooptijd: t.doorlooptijd, zone: "binnenkort", urgentie: t.urgentie, status: "te_doen", fase: t.fase };
+  return { id: t.id, titel: t.titel, uitleg: t.uitleg, waarom: t.waarom, doorlooptijd: t.doorlooptijd, zone: "binnenkort", urgentie: t.urgentie, status: "te_doen", fase: t.fase, bronnen: TAAK_BRONNEN[t.id] };
 }

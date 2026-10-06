@@ -2,6 +2,7 @@
 import { useState } from "react";
 import type { Status, Task } from "@/lib/types";
 import { useStore } from "@/lib/store";
+import { BronLinks } from "./BronLinks";
 
 const URG: Record<Task["urgentie"], { label: string; cls: string }> = {
   hoog: { label: "Urgentie hoog", cls: "bg-accent-50 text-accent-700" },
@@ -33,7 +34,12 @@ export function TaskCard({ task, highlight, onExpert }: { task: Task; highlight:
       <button className="mt-2 text-sm font-bold text-mist-600 underline underline-offset-2" aria-expanded={open} onClick={() => setOpen(!open)}>
         Waarom nu?
       </button>
-      {open && <p className="anim-pop mt-1 rounded-xl bg-sand-50 p-3 text-base">{task.waarom}</p>}
+      {open && (
+        <div className="anim-pop mt-1 rounded-xl bg-sand-50 p-3 text-base">
+          <p>{task.waarom}</p>
+          <BronLinks ids={task.bronnen} className="mt-2" />
+        </div>
+      )}
       {task.expertVerzoek && <p className="mt-2 rounded-xl bg-accent-50 p-3 text-sm">Je expertaanvraag: {task.expertVerzoek.moment}. {task.expertVerzoek.toelichting}</p>}
 
       <div className="mt-3 flex flex-wrap items-center gap-2">

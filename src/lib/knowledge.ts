@@ -6,6 +6,8 @@ export interface Kennis {
   documenten: string[];
   fouten: string[];
   doorlooptijden: { wat: string; duur: string }[];
+  /** Id's uit bronnen.ts waar je hierover meer vindt. */
+  bronnen: string[];
 }
 
 /** Kennisbank per fase. Doorlooptijden zijn indicaties; ze verschillen per regio. */
@@ -20,6 +22,7 @@ export const KENNIS: Record<Fase, Kennis> = {
     documenten: ["Eigen notities over vergeetachtigheid en gedrag", "Overzicht van medicijnen", "Zorgpas of verzekeringsgegevens"],
     fouten: ["Te lang wachten omdat het 'bij de leeftijd hoort'", "Het gesprek aangaan met verwijten in plaats van zorg", "Alleen met de huisarts praten zonder voorbeelden mee te nemen"],
     doorlooptijden: [{ wat: "Afspraak bij de huisarts", duur: "enkele dagen tot 2 weken" }, { wat: "Doorverwijzing geheugenpoli", duur: "enkele weken tot maanden" }],
+    bronnen: ["alzheimer", "dementie_nl", "rijksoverheid"],
   },
   2: {
     uitleg: "Er wordt onderzoek gedaan of er is net een diagnose. Dit is een emotionele periode. Het helpt om één vast aanspreekpunt te regelen en alvast te weten wat er op je afkomt.",
@@ -31,6 +34,7 @@ export const KENNIS: Record<Fase, Kennis> = {
     documenten: ["Verwijsbrief van de huisarts", "Medicatieoverzicht", "Uitslagen en brieven van de geheugenpoli"],
     fouten: ["Alleen naar het gesprek over de uitslag gaan", "Niet vragen naar een casemanager", "Alles zelf willen regelen in plaats van hulp te accepteren"],
     doorlooptijden: [{ wat: "Onderzoek op de geheugenpoli", duur: "enkele weken tot maanden" }, { wat: "Casemanager krijgen", duur: "enkele weken" }],
+    bronnen: ["alzheimer", "zorginstituut", "dementie_nl"],
   },
   3: {
     uitleg: "Je naaste woont nog thuis, met hulp. Nu draait het om een houdbare situatie: hulp via de gemeente, dagbesteding, tijd voor jezelf en juridische zaken regelen zolang dat nog kan.",
@@ -44,6 +48,7 @@ export const KENNIS: Record<Fase, Kennis> = {
     documenten: ["Identiteitsbewijs van je naaste", "Medisch overzicht en diagnosebrief", "Overzicht van inkomen, vaste lasten en verzekeringen", "Eventueel bestaand testament of levenstestament"],
     fouten: ["Te lang wachten met een volmacht", "Pas hulp zoeken bij een crisis", "Geen noodplan hebben als jij uitvalt", "Zelf alles doen en geen respijtzorg inzetten"],
     doorlooptijden: [{ wat: "Wmo-aanvraag", duur: "gemeente beslist meestal binnen 8 weken" }, { wat: "Dagbesteding", duur: "enkele weken tot maanden" }, { wat: "Volmacht via notaris", duur: "enkele weken" }, { wat: "Mentorschap via kantonrechter", duur: "enkele maanden" }],
+    bronnen: ["rijksoverheid", "regelhulp", "notaris", "rechtspraak", "mantelzorg"],
   },
   4: {
     uitleg: "Thuis lukt niet meer of wordt te zwaar. Nu gaat het om de Wlz-indicatie (langdurige zorg), het zorgkantoor en de keuze voor een zorgaanbieder of een verpleeghuis.",
@@ -56,6 +61,7 @@ export const KENNIS: Record<Fase, Kennis> = {
     documenten: ["Aanvraagformulier voor het CIZ", "Medische gegevens en diagnose", "Overzicht van de huidige zorg", "Machtiging of volmacht als jij namens je naaste regelt"],
     fouten: ["Te laat beginnen met de aanvraag", "Alleen naar één verpleeghuis kijken", "Niet laten meekijken door casemanager of cliëntondersteuner"],
     doorlooptijden: [{ wat: "CIZ-besluit na volledige aanvraag", duur: "ca. 6 weken" }, { wat: "Plek in een verpleeghuis", duur: "wisselt sterk per regio, soms maanden" }],
+    bronnen: ["ciz", "zorginstituut", "rijksoverheid", "zorgkaart"],
   },
   5: {
     uitleg: "De laatste levensfase, het afscheid en wat daarna komt. Er is veel te regelen, maar het hoeft niet allemaal meteen. Zorg ook goed voor jezelf.",
@@ -68,5 +74,6 @@ export const KENNIS: Record<Fase, Kennis> = {
     documenten: ["Uitvaartverzekering of wensenlijst", "Testament", "Overzicht van rekeningen, abonnementen en verzekeringen", "Pensioen- en uitkeringsgegevens"],
     fouten: ["Abonnementen en vaste lasten niet tijdig opzeggen", "Een erfenis aanvaarden zonder de gevolgen te kennen", "Geen tijd nemen voor eigen rouw"],
     doorlooptijden: [{ wat: "Verklaring van erfrecht", duur: "enkele weken", }, { wat: "Administratieve afwikkeling", duur: "enkele maanden" }],
+    bronnen: ["palliaweb", "notaris", "rijksoverheid", "mantelzorg"],
   },
 };

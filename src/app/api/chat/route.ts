@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
 import { SYSTEM_PROMPT } from "@/lib/chatPrompt";
 import { parseChatAntwoord } from "@/lib/chatParse";
+import { bouwBronContext } from "@/lib/retrieval";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -26,7 +27,9 @@ export async function POST(req: Request) {
   if (typeof vraag !== "string" || !vraag.trim()) return NextResponse.json({ fout: "ongeldig" }, { status: 400 });
 
   // Context bij elk verzoek: intake, fase, volledige tijdlijn en de laatste ~10 berichten.
-  const context = `Intakeprofiel: ${JSON.stringify(intake)}\nHuidige fase: ${fase}\nHuidige tijdlijn (JSON): ${JSON.stringify(tijdlijn)}`;
+  // Retrieval: de best passende fragmenten uit kennisbank en takenbibliotheek, met bron-id's.
+  const bronContext = bouwBronContext(String(vraag), Number(fase) as 1 | 2 | 3 | 4 | 5);
+  const context = `${bronContext}\n\nIntakeprofiel: ${JSON.stringify(intake)}\nHuidige fase: ${fase}\nHuidige tijdlijn (JSON): ${JSON.stringify(tijdlijn)}`;
   const historie = (Array.isArray(berichten) ? berichten : []).slice(-10)
     .map((m: any) => ({ role: m.rol === "gebruiker" ? "user" as const : "assistant" as const, content: String(m.tekst).slice(0, 4000) }));
   // Bericht-beurten moeten afwisselen; begin met een gebruiker.

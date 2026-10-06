@@ -4,6 +4,7 @@ import { FASE_NAMEN } from "@/lib/intake";
 import { KENNIS } from "@/lib/knowledge";
 import { useStore } from "@/lib/store";
 import type { Fase } from "@/lib/types";
+import { BronLinks } from "./BronLinks";
 
 const FASES: Fase[] = [1, 2, 3, 4, 5];
 
@@ -74,6 +75,10 @@ export function Knowledge() {
             <div className="md:col-span-2">
               <h3 className="font-extrabold text-sage-800">Doorlooptijden (indicatie)</h3>
               <ul className="mt-2 grid gap-2 sm:grid-cols-2">{k.doorlooptijden.map((d) => <li key={d.wat} className="rounded-xl bg-sand-50 p-3"><span className="font-bold">{d.wat}</span><br /><span className="text-ink-soft">{d.duur}</span></li>)}</ul>
+            </div>
+            <div className="border-t border-sand-100 pt-4 md:col-span-2">
+              <BronLinks ids={k.bronnen} />
+              <p className="mt-1 text-xs text-ink-soft">Deze uitleg is een samenvatting in gewone taal. Controleer termijnen en regels altijd bij de bron.</p>
             </div>
           </div>
         </>

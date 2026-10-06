@@ -21,6 +21,8 @@ export interface Task {
   gewijzigdOp?: number;
   /** De chatbot stelde voor om hier een expert voor in te schakelen. */
   expertVoorgesteld?: boolean;
+  /** Id's uit het bronnenregister (zie bronnen.ts). */
+  bronnen?: string[];
   expertVerzoek?: { toelichting: string; moment: string };
 }
 
@@ -33,6 +35,7 @@ export interface ChatMessage {
   /** Samenvatting van tijdlijnwijzigingen bij een assistent-bericht. */
   wijzigingen?: { tekst: string; taakIds: string[]; undoId: string | null; ongedaan?: boolean };
   vervolgvraag?: string | null;
+  bronnen?: string[];
   fout?: boolean;
 }
 
@@ -45,6 +48,7 @@ export type TijdlijnUpdate = {
   urgentie: Urgentie;
   fase: number;
   reden: string;
+  bronnen?: string[];
 };
 
 export interface ChatAntwoord {
@@ -52,6 +56,8 @@ export interface ChatAntwoord {
   tijdlijn_updates: TijdlijnUpdate[];
   fase_aanpassing: number | null;
   vervolgvraag: string | null;
+  /** Bron-id's waar het antwoord op steunt. */
+  bronnen?: string[];
 }
 
 export type Stage = "welcome" | "intake" | "result" | "dashboard";
