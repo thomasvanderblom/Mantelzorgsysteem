@@ -4,6 +4,7 @@ import { useStore } from "@/lib/store";
 import { Header } from "./Header";
 import { Timeline } from "./Timeline";
 import { Footer } from "./Footer";
+import { Knowledge } from "./Knowledge";
 
 export function Dashboard() {
   const { state } = useStore();
@@ -23,6 +24,7 @@ export function Dashboard() {
       <Header />
       <main className="mx-auto w-full max-w-7xl flex-1 space-y-12 px-4 py-6">
         <Timeline tasks={state.tasks} highlight={highlight} onExpert={setExpertTaak} />
+        <Knowledge />
       </main>
       <Footer />
     </div>
